@@ -37,10 +37,6 @@ jobs:
       - name: Pull versioned data and model (DVC)
         run: dvc pull -f
 
-      - name: Build active_data and train/eval splits
-        run: |
-          python scripts/build_active_data.py --version all
-          python scripts/prepare_data_and_train.py --version all
 
       - name: Run pytest suite
         run: |
