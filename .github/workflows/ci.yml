@@ -37,16 +37,21 @@ jobs:
       - name: Pull versioned data and model (DVC)
         run: dvc pull -f
 
-
       - name: Run pytest suite
         run: |
           pytest tests/ -v --junitxml=report.xml | tee pytest_output.txt
         continue-on-error: true
         id: pytest
 
-      - name: Create CML report
+      - name: Set up Node for CML
         if: github.event_name == 'pull_request'
-        uses: iterative/setup-cml@v3
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install CML CLI
+        if: github.event_name == 'pull_request'
+        run: npm install -g @dvcorg/cml
 
       - name: Publish CML comment on PR
         if: github.event_name == 'pull_request'
@@ -74,4 +79,3 @@ jobs:
       - name: Fail job if tests failed
         if: steps.pytest.outcome == 'failure'
         run: exit 1
-
