@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
-from conftest import EVAL_PATH, FEATURE_COLUMNS, MODEL_PATH, TARGET_COLUMN, eval_df
+from conftest import FEATURE_COLUMNS, MODEL_PATH, TARGET_COLUMN, eval_df
 
 # Quality gates — tests fail if the model degrades below these thresholds.
 MIN_ACCURACY = 0.90

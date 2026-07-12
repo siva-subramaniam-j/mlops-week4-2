@@ -5,11 +5,9 @@ import pytest
 
 from conftest import (
     ACTIVE_DATA_PATH,
-    EVAL_PATH,
     FEATURE_BOUNDS,
     FEATURE_COLUMNS,
     TARGET_COLUMN,
-    TRAIN_PATH,
     VALID_SPECIES,
     active_df,
     eval_df,
@@ -17,9 +15,8 @@ from conftest import (
 )
 
 
-@pytest.mark.parametrize("path", [ACTIVE_DATA_PATH, TRAIN_PATH, EVAL_PATH])
-def test_dataset_files_exist(path):
-    assert path.exists(), f"Missing dataset file: {path}"
+def test_active_data_file_exists():
+    assert ACTIVE_DATA_PATH.exists(), f"Missing dataset file: {ACTIVE_DATA_PATH}"
 
 
 def test_active_data_schema(active_df: pd.DataFrame):
@@ -69,15 +66,12 @@ def test_feature_value_ranges(df_fixture, request):
 
 
 def test_active_data_row_count(active_df: pd.DataFrame):
-    # Default Week 4 build uses raw + v1 + v2 = 300 rows.
     assert len(active_df) in {150, 300}, (
         f"Unexpected active_data size: {len(active_df)} rows"
     )
 
 
-def test_train_has_enough_samples(train_df: pd.DataFrame):
+def test_train_eval_split_sizes(active_df: pd.DataFrame, train_df: pd.DataFrame, eval_df: pd.DataFrame):
+    assert len(train_df) + len(eval_df) == len(active_df)
     assert len(train_df) >= 80, "Training set should have at least 80 rows"
-
-
-def test_eval_has_enough_samples(eval_df: pd.DataFrame):
     assert len(eval_df) >= 20, "Evaluation set should have at least 20 rows"
